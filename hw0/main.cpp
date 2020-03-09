@@ -73,5 +73,19 @@ int main(){
     point_P_transformed = T_shift * T_rot * point_P;
     std::cout << point_P_transformed << std::endl;
 
+    std::cout << "********************* concatenation test *********************" << std::endl;
+    Eigen::Matrix3f concat_a;
+    concat_a << 1, 2, 3, 4, 5, 6, 7, 8, 9;
+    // Eigen::Vector3f concat_b = Eigen::Vector3f(2);
+    // Eigen::Vector3f concat_c = Eigen::Vector3f(3).transpose();
+    
+    Eigen::Matrix4f concat_d = Eigen::Matrix4f::Zero();
+    concat_d.block<3, 3>(0, 0) = concat_a;
+
+    std::clog << concat_d << std::endl;
+
+    // float tmp = -1.5;
+    // std::clog << cos(500) << fmod(tmp, 3) << std::endl;
+
     return 0;
 }

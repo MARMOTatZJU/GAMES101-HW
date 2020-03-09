@@ -34,3 +34,6 @@
 # build
 build
 .vscode
+
+# zip
+*.zip

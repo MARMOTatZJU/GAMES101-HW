@@ -1,7 +1,7 @@
 mkdir -p ./build
 pushd ./build
 cmake ..
-make
+make -j4
 echo "***************************************************************************************"
-./Transformation
+./Rasterizer
 popd
