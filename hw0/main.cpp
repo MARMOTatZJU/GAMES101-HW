@@ -86,6 +86,14 @@ int main(){
 
     // float tmp = -1.5;
     // std::clog << cos(500) << fmod(tmp, 3) << std::endl;
+    std::clog << "seq: " << std::endl << point_P.segment(0, 2) << std::endl;
+
+
+    // cast
+    Eigen::Vector2f v2f;
+    v2f = point_P;
+    std::clog << "cast: " << std::endl << v2f << std::endl;
+
 
     return 0;
 }

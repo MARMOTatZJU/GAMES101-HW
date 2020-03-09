@@ -67,6 +67,7 @@ namespace rst
         void set_projection(const Eigen::Matrix4f& p);
 
         void set_pixel(const Eigen::Vector3f& point, const Eigen::Vector3f& color);
+        void mix_pixel(const Eigen::Vector3f& point, const Eigen::Vector3f& color);  // added by user for msaa bonus
 
         void clear(Buffers buff);
 
@@ -93,6 +94,7 @@ namespace rst
         std::vector<Eigen::Vector3f> frame_buf;
 
         std::vector<float> depth_buf;
+        std::vector<float> depth_buf_msaa2x2;  // added by user for msaa bonus
         int get_index(int x, int y);
 
         int width, height;
