@@ -13,3 +13,11 @@ For effect w/o MSAA:
 
 For effect w/t MSAA: 
 * comment L180-191 and uncomment L194-222
+
+### Personal notes
+
+#### Black edge issue in MSAA
+
+Need to consider visibility of each super pixel _independently_.
+
+Need to _merge_ these super pixel (mix_pixel).
