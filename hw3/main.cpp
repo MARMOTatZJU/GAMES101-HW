@@ -8,6 +8,9 @@
 #include "Texture.hpp"
 #include "OBJ_Loader.h"
 
+// added by user
+#include <algorithm>
+
 Eigen::Matrix4f get_view_matrix(Eigen::Vector3f eye_pos)
 {
     Eigen::Matrix4f view = Eigen::Matrix4f::Identity();
@@ -172,8 +175,26 @@ Eigen::Vector3f phong_fragment_shader(const fragment_shader_payload& payload)
     {
         // TODO: For each light source in the code, calculate what the *ambient*, *diffuse*, and *specular* 
         // components are. Then, accumulate that result on the *result_color* object.
-        
+
+        auto light_vec = l1.position - point;
+        auto view_vec = eye_pos - point;
+        auto radius2 = light_vec.dot(light_vec);
+        auto light_vec_norm = light_vec.normalized();
+        auto view_vec_norm = view_vec.normalized();
+
+        // ambient term
+        result_color += ka.cwiseProduct(amb_light_intensity);
+        // diffuse term
+        result_color += kd.cwiseProduct(light.intensity) / radius2
+                        * std::max(0.0f, light_vec_norm.dot(normal));
+        // specular term
+        auto h_vec = (light_vec_norm + view_vec_norm).normalized();
+        result_color += ks.cwiseProduct(light.intensity) / radius2
+                        * std::pow(std::max(0.0f, h_vec.dot(normal)), p);
     }
+
+    // for debugging
+    // std::clog << result_color << std::endl;
 
     return result_color * 255.f;
 }
