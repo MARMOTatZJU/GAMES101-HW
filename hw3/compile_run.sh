@@ -3,5 +3,5 @@ pushd ./build
 cmake ..
 make -j4
 echo "***************************************************************************************"
-./Rasterizer
+./Rasterizer output.png normal
 popd
