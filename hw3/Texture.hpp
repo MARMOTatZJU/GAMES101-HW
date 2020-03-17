@@ -31,18 +31,18 @@ public:
     }
 
     // bilinear texel sampling
-    // Eigen::Vector3f getColorBilinear(float u, float v)
+    Eigen::Vector3f getColorBilinear(float u, float v)
     // Eigen::Vector3f getColor(float u, float v)
-    // {
-    //     auto u_img = u * width;
-    //     auto v_img = (1 - v) * height;
-    //     // auto color = image_data.at<cv::Vec3b>(v_img, u_img);
-    //     cv::Mat patch;
-    //     // std::clog << "v_img=" << v_img << " | u_img=" << u_img << std::endl;
-    //     // std::clog << "height=" << height << " | width=" << width << std::endl;        
-    //     cv::getRectSubPix(image_data, cv::Size(1, 1), cv::Point2f(u_img, v_img), patch);
-    //     auto color = patch.at<cv::Vec3b>(0, 0);
-    //     return Eigen::Vector3f(color[0], color[1], color[2]);
-    // }
+    {
+        auto u_img = u * width;
+        auto v_img = (1 - v) * height;
+        // auto color = image_data.at<cv::Vec3b>(v_img, u_img);
+        cv::Mat patch;
+        // std::clog << "v_img=" << v_img << " | u_img=" << u_img << std::endl;
+        // std::clog << "height=" << height << " | width=" << width << std::endl;        
+        cv::getRectSubPix(image_data, cv::Size(1, 1), cv::Point2f(u_img, v_img), patch);
+        auto color = patch.at<cv::Vec3b>(0, 0);
+        return Eigen::Vector3f(color[0], color[1], color[2]);
+    }
 };
 #endif //RASTERIZER_TEXTURE_H
