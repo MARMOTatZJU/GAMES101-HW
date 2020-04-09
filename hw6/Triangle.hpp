@@ -233,8 +233,36 @@ inline Intersection Triangle::getIntersection(Ray ray)
 
     // TODO find ray triangle intersection
 
+    // copied from hw5: Triangle.cpp
+    // moller-trumbore algorithm
+    // auto E1 = v1 - v0;
+    // auto E2 = v2 - v0;
+    // auto S = ray.origin - v0;  // tvec
+    // auto S1 = crossProduct(ray.direction, E2); // pvec
+    // auto S2 = crossProduct(S, E1);  // qvec
+
+    // float denominator = dotProduct(S1, E1);  // det
+    // float t = dotProduct(S2, E2) / denominator;  // t_tmp
+    // float b1 = dotProduct(S1, S) / denominator;  // u
+    // float b2 = dotProduct(S2, ray.direction) / denominator;  // v
+
+    // tnear = t;
+    // u = b1;
+    // v = b2;
+
+    // inter.happened = (t>0) && (b1>0) && (b2>0) && (1-b1-b2>0);
+    inter.happened = (t_tmp>0) && (u>0) && (v>0) && (1-u-v>0);
+    inter.coords = ray(t_tmp);
+    inter.normal = this->normal;
+    inter.distance = t_tmp;
+    inter.obj = this;
+    inter.m = m;
 
 
+    // std::clog << inter.happened << std::endl;
+    // std::clog << inter.normal << std::endl;    
+    // std::clog << inter.distance << std::endl; 
+    // std::clog << inter.coords << std::endl;
 
     return inter;
 }
