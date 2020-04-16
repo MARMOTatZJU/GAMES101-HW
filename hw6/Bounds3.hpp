@@ -101,7 +101,7 @@ inline bool Bounds3::IntersectP(const Ray& ray, const Vector3f& invDir,
     auto t_pmax = (pMax - ray.origin) * invDir;
     auto t_pmin = (pMin - ray.origin) * invDir;
     
-    // shuffle min & max
+    // USER_NOTE: need to shuffle min & max
     Vector3f t_min(
         std::min(t_pmin.x, t_pmax.x),
         std::min(t_pmin.y, t_pmax.y),
