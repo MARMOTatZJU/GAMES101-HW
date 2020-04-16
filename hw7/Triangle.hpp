@@ -263,6 +263,7 @@ inline Intersection Triangle::getIntersection(Ray ray)
     inter.distance = t_tmp;
     inter.obj = this;
     inter.m = m;
+    inter.emit = m->m_emission;
 
     // std::clog << inter.happened << std::endl;
     // std::clog << inter.normal << std::endl;    

@@ -153,10 +153,12 @@ Intersection BVHAccel::getIntersection(BVHBuildNode* node, const Ray& ray) const
 
 void BVHAccel::getSample(BVHBuildNode* node, float p, Intersection &pos, float &pdf){
     if(node->left == nullptr || node->right == nullptr){
-        node->object->Sample(pos, pdf);
+        node->object->Sample(pos, pdf);  // USER_NOTE: inverse of the object's area, overwrite pdf
         pdf *= node->area;
         return;
     }
+    // USER_NOTE: dichotomic search over p
+    // node->area (non-leaf node): accumulated area sum
     if(p < node->left->area) getSample(node->left, p, pos, pdf);
     else getSample(node->right, p - node->left->area, pos, pdf);
 }
@@ -164,5 +166,5 @@ void BVHAccel::getSample(BVHBuildNode* node, float p, Intersection &pos, float &
 void BVHAccel::Sample(Intersection &pos, float &pdf){
     float p = std::sqrt(get_random_float()) * root->area;
     getSample(root, p, pos, pdf);
-    pdf /= root->area;
+    pdf /= root->area;  // USER_NOTE: object's pdf * (leaf) node->area / root->area
 }

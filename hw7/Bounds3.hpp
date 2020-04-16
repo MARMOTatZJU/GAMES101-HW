@@ -116,7 +116,9 @@ inline bool Bounds3::IntersectP(const Ray& ray, const Vector3f& invDir,
 
     auto t_enter = std::max({t_min.x, t_min.y, t_min.z});
     auto t_exit  = std::min({t_max.x, t_max.y, t_max.z});
-    bool inter = (t_exit>t_enter) && (t_exit>0);
+    // USER_NOTE: equalily is a must
+    // otherwise, half of the scene will be somber
+    bool inter = (t_exit>=t_enter) && (t_exit>0);
 
     // std::clog << "pMin: " << pMin << " " << "pMax: " << pMax << std::endl;
     // std::clog << "ray: " << ray;
