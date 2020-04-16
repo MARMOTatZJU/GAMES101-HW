@@ -97,6 +97,36 @@ inline bool Bounds3::IntersectP(const Ray& ray, const Vector3f& invDir,
     // dirIsNeg: ray direction(x,y,z), dirIsNeg=[int(x>0),int(y>0),int(z>0)], use this to simplify your logic
     // TODO test if ray bound intersects
 
+    // copied from hw6: Bounds3.hpp
+    // t_min & t_max along x/y/z-axis
+    auto t_pmax = (pMax - ray.origin) * invDir;
+    auto t_pmin = (pMin - ray.origin) * invDir;
+    
+    // shuffle min & max
+    Vector3f t_min(
+        std::min(t_pmin.x, t_pmax.x),
+        std::min(t_pmin.y, t_pmax.y),
+        std::min(t_pmin.z, t_pmax.z)
+        );
+    Vector3f t_max(
+        std::max(t_pmin.x, t_pmax.x),
+        std::max(t_pmin.y, t_pmax.y),
+        std::max(t_pmin.z, t_pmax.z)
+        );
+
+    auto t_enter = std::max({t_min.x, t_min.y, t_min.z});
+    auto t_exit  = std::min({t_max.x, t_max.y, t_max.z});
+    bool inter = (t_exit>t_enter) && (t_exit>0);
+
+    // std::clog << "pMin: " << pMin << " " << "pMax: " << pMax << std::endl;
+    // std::clog << "ray: " << ray;
+    // std::clog << "invDir: " << invDir << std::endl;
+    // std::clog << "t_min: " << t_min << " " << "t_max: " << t_max << std::endl << std::endl;
+    // std::clog << "t_enter: " << t_enter << " " << "t_exit: " << t_exit << std::endl << std::endl;
+    // std::clog << "inter" << inter << std::endl;
+
+
+    return inter;
 }
 
 inline Bounds3 Union(const Bounds3& b1, const Bounds3& b2)

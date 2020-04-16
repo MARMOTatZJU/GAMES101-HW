@@ -254,6 +254,21 @@ inline Intersection Triangle::getIntersection(Ray ray)
 
     // TODO find ray triangle intersection
 
+    // copied from hw6: Triangle.cpp
+    // moller-trumbore algorithm
+    // inter.happened = (t>0) && (b1>0) && (b2>0) && (1-b1-b2>0);
+    inter.happened = (t_tmp>0) && (u>0) && (v>0) && (1-u-v>0);
+    inter.coords = ray(t_tmp);
+    inter.normal = this->normal;
+    inter.distance = t_tmp;
+    inter.obj = this;
+    inter.m = m;
+
+    // std::clog << inter.happened << std::endl;
+    // std::clog << inter.normal << std::endl;    
+    // std::clog << inter.distance << std::endl; 
+    // std::clog << inter.coords << std::endl;
+
     return inter;
 }
 
