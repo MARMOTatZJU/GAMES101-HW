@@ -23,12 +23,13 @@ void Renderer::Render(const Scene& scene)
     float imageAspectRatio = scene.width / (float)scene.height;
     Vector3f eye_pos(278, 273, -800);
     int m = 0;
+    float mMax = (float)scene.height * (float)scene.width;
 
     // change the spp value to change sample ammount
     int spp = 16; // 16;
     std::cout << "SPP: " << spp << "\n";
     // omp_set_num_threads(8);
-    #pragma omp parallel for num_threads(8)
+    #pragma omp parallel for num_threads(8) collapse(2) schedule(dynamic, 4)
     for (uint32_t j = 0; j < scene.height; ++j) {
         for (uint32_t i = 0; i < scene.width; ++i) {
             // generate primary ray direction
@@ -37,14 +38,22 @@ void Renderer::Render(const Scene& scene)
             float y = (1 - 2 * (j + 0.5) / (float)scene.height) * scale;
 
             Vector3f dir = normalize(Vector3f(-x, y, 1));
+            thread_local Vector3f color;
+            color = Vector3f(0.0);
             // USER_NOTE: randomly generate spp rays
             // scene.castRay: check hit & do shading on hit point
             for (int k = 0; k < spp; k++){
-                framebuffer[j*scene.width + i] += scene.castRay(Ray(eye_pos, dir), 0) / spp;  
+                color += scene.castRay(Ray(eye_pos, dir), 0) / spp;
             }
-            // m++;
+            framebuffer[j*scene.width + i] += color;
+            #pragma omp critical
+            {
+                m++;
+                UpdateProgress((float)m / mMax);
+            }
         }
-        UpdateProgress(j / (float)scene.height);
+        // USER_NOTE: disabled for parallelism
+        // UpdateProgress(j / (float)scene.height); 
     }
     UpdateProgress(1.f);
 
