@@ -6,8 +6,9 @@
 #define RAYTRACING_MATERIAL_H
 
 #include "Vector.hpp"
+#include <cmath>
 
-enum MaterialType { DIFFUSE};
+enum MaterialType { DIFFUSE, MICROFACET};
 
 class Material{
 private:
@@ -131,7 +132,7 @@ Vector3f Material::getColorAt(double u, double v) {
 
 Vector3f Material::sample(const Vector3f &wi, const Vector3f &N){
     switch(m_type){
-        case DIFFUSE:
+        case DIFFUSE: case MICROFACET:
         {
             // uniform sample on the hemisphere
             float x_1 = get_random_float(), x_2 = get_random_float();
@@ -147,7 +148,7 @@ Vector3f Material::sample(const Vector3f &wi, const Vector3f &N){
 
 float Material::pdf(const Vector3f &wi, const Vector3f &wo, const Vector3f &N){
     switch(m_type){
-        case DIFFUSE:
+        case DIFFUSE: case MICROFACET:
         {
             // uniform sample probability 1 / (2 * PI)
             if (dotProduct(wo, N) > 0.0f)
@@ -172,6 +173,35 @@ Vector3f Material::eval(const Vector3f &wi, const Vector3f &wo, const Vector3f &
             else
                 return Vector3f(0.0f);
             break;
+        }
+        case MICROFACET:  // added by user for Microfacet model
+        {
+            Vector3f h = normalize(wi + wo);
+            float N_dot_wo = dotProduct(wo, N);
+            float N_dot_wi = dotProduct(wi, N);
+            float N_dot_h = dotProduct(h, N);
+            // fresnel term
+            float F;
+            float ior = 2.0; //1.5;
+            fresnel(wi, N, ior, F);
+            // shadow masking term
+            float G = 1;
+            float G1 = 2 * N_dot_wo * N_dot_wo
+                         / dotProduct(wo, h);
+            float G2 = 2 * N_dot_wo * N_dot_wi
+                         / dotProduct(wo, h);
+            G = std::min({G, G1, G2});
+            // normal distribution
+            float D;
+            float m = 0.4; //rms slope, roughness
+            float chi_Nh = std::max(0.0f, N_dot_h);
+            float alpha = acos(N_dot_h);
+            float tan_alpha = tan(alpha);
+            D = chi_Nh * exp(-tan_alpha*tan_alpha /  m) 
+                       / M_PI / (m*m) / pow(cos(alpha), 4);
+            
+            float fr = (F*G*D) / 4 / N_dot_wi / N_dot_wo;
+            return Vector3f(fr);
         }
     }
 }
