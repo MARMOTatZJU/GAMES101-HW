@@ -86,7 +86,7 @@ private:
         return a.x * B + a.y * C + a.z * N;
     }
 
-    inline Vector3f eval_microfacet(
+    inline float eval_microfacet(
         const Vector3f &wi, const Vector3f &wo, const Vector3f &N,
         const float &ior, const float &roughness
     );
@@ -181,44 +181,53 @@ Vector3f Material::eval(const Vector3f &wi, const Vector3f &wo, const Vector3f &
         }
         case MICROFACET:  // added by user for Microfacet model
         {
-            return eval_microfacet(wi, wo, N, 1.5, 0.4);
+            return Ks*eval_microfacet(wi, wo, N, 1.5, 0.4);
         }
         case MICROFACET_2:  // added by user for Microfacet model
         {
-            return eval_microfacet(wi, wo, N, 1.5, 0.7);
+            return Ks*eval_microfacet(wi, wo, N, 1.5, 1.0);
         }
     }
 }
 
-Vector3f Material::eval_microfacet(
+float Material::eval_microfacet(
     const Vector3f &wi, const Vector3f &wo, const Vector3f &N,
     const float &ior, const float &roughness
 ){
+    float eps = 1e-6;
     Vector3f h = normalize(wi + wo);
-    float N_dot_wo = dotProduct(wo, N);
-    float N_dot_wi = dotProduct(wi, N);
-    float N_dot_h = dotProduct(h, N);
+    float N_dot_wo = std::max(0.0f, dotProduct(wo, N));
+    float N_dot_wi = std::max(0.0f, dotProduct(wi, N));
+    float N_dot_h = std::max(0.0f, dotProduct(h, N));
     // fresnel term, exact form
     float F;
     fresnel(wi, N, ior, F);
     // shadow masking term
     float G = 1;
-    float G1 = 2 * N_dot_wo * N_dot_wo
-                    / dotProduct(wo, h);
-    float G2 = 2 * N_dot_wo * N_dot_wi
-                    / dotProduct(wo, h);
+    float G1 = 2 * N_dot_h * N_dot_wo
+                    / std::max(0.0f, dotProduct(wo, h));
+    float G2 = 2 * N_dot_h * N_dot_wi
+                    / std::max(0.0f, dotProduct(wo, h));
     G = std::min({G, G1, G2});
+    // G = std::max(G, 0.0f);
     // normal distribution, beckman distribution
     float D;
     float m = roughness; //rms slope, roughness
-    float chi_Nh = std::max(0.0f, N_dot_h);
+    float m2 = m*m;
+    // float chi_Nh = std::max(0.0f, N_dot_h);
+    float chi_Nh = (float)(N_dot_h > 0);
     float alpha = acos(N_dot_h);
     float tan_alpha = tan(alpha);
-    D = chi_Nh * exp(-tan_alpha*tan_alpha /  m) 
-                / M_PI / (m*m) / pow(cos(alpha), 4);
-    
-    float fr = (F*G*D) / 4 / N_dot_wi / N_dot_wo;
-    return Vector3f(fr);
+    float cos_alpha = cos(alpha);
+    float cos_alpha2 = cos_alpha*cos_alpha;
+    float cos_alpha4 = cos_alpha2*cos_alpha2;
+    D = chi_Nh * exp(-tan_alpha*tan_alpha / m2) 
+                / M_PI / m2 / cos_alpha4;
+    // USER_NOTE:
+    // use the cook-torrance formula on wiki, page: Specular_highlight
+    float fr = (F*G*D) / M_PI / std::max(eps, N_dot_wi*N_dot_wo);
+    // std::clog << fr << std::endl;
+    return fr;
 }
 
 

@@ -27,6 +27,7 @@ void Renderer::Render(const Scene& scene)
 
     // change the spp value to change sample ammount
     int spp = 16; // 16;
+    // float gamma_corr = 2.2;
     std::cout << "SPP: " << spp << "\n";
     // omp_set_num_threads(8);
     #pragma omp parallel for num_threads(8) collapse(2) schedule(dynamic, 4)
@@ -44,6 +45,10 @@ void Renderer::Render(const Scene& scene)
             // scene.castRay: check hit & do shading on hit point
             for (int k = 0; k < spp; k++){
                 color += scene.castRay(Ray(eye_pos, dir), 0) / spp;
+                // gamma correction
+                // color.x = pow(color.x, 1.0/gamma_corr);
+                // color.y = pow(color.y, 1.0/gamma_corr);
+                // color.z = pow(color.z, 1.0/gamma_corr);
             }
             framebuffer[j*scene.width + i] += color;
             #pragma omp critical
