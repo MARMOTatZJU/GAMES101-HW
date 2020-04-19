@@ -110,6 +110,7 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
         float dist_dir = (inter_dir.coords - inter_light.coords).norm();
         if ( dist_dir < 0.01 )
         {
+            // apply rendering equation (dir. part)
             L_dir = inter_light.emit * m->eval(ws, wo, N) 
                     * dotProduct(ws, N) * dotProduct(-ws, NN)
                     / dotProduct(ws_unorm, ws_unorm) / pdf_light;
@@ -120,6 +121,7 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
         float p_RR = get_random_float();
         if (p_RR < RussianRoulette)
         {
+            // apply rendering equation (indir. part)
             Vector3f wi = m->sample(wo, N);  // sample a direction for indierect illumination
             Vector3f indir_shade_color = castRay(Ray(p, wi), depth);  // cast ray recursively
             L_indir = indir_shade_color * m->eval(wi, wo, N) 
