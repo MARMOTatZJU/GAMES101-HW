@@ -9,7 +9,7 @@ I've finished task ...
     * pragma omp schedule collapse(2) dynamic for loop in Renderer.cpp
     * pragma omp critical for pbar update
     * local_thread for get_random_float in global.hpp
-  * 400minute for SPP=512
+  * 5h for SPP=1025
 * Microfacet (partially done)
   * microfacet-SPP1.ppm, microfacet-SPP4.ppm
     * microfacet-SPP8.ppm will have problem of "over-exposed"
