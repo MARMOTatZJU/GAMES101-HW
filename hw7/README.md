@@ -6,6 +6,9 @@ I've finished task ...
   * diffuse-SPP16.ppm, diffuse-SPP128.ppm, diffuse-SPP512.ppm
 * 多线程
   * Render.cpp, with openmp
+    * pragma omp schedule collapse(2) dynamic for loop in Renderer.cpp
+    * pragma omp critical for pbar update
+    * local_thread for get_random_float in global.hpp
   * 400minute for SPP=512
 * Microfacet (partially done)
   * microfacet-SPP1.ppm, microfacet-SPP4.ppm
