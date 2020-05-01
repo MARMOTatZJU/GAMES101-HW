@@ -14,7 +14,6 @@ namespace CGL {
         // TODO (Part 1): Create a rope starting at `start`, ending at `end`, and containing `num_nodes` nodes.
         
         Vector2D step_vec = (end - start) / (num_nodes - 1.0);
-        // std::clog << step_vec << " " << num_nodes << " " << end << " " << start<< std::endl;
         
         Vector2D current_node=start;
         Vector2D previous_node; 
@@ -24,7 +23,6 @@ namespace CGL {
         Spring* current_spring = nullptr;
         for (auto ith=1;ith<=(num_nodes-1);++ith)
         {
-            // std::clog << num_nodes << std::endl;
             if (ith != (num_nodes - 1))
             {
                 current_node = start + ith*step_vec;
@@ -39,24 +37,18 @@ namespace CGL {
             // append current mass and spring
             masses.push_back(current_mass);
             springs.push_back(current_spring);
-            // std::clog << ith << " " << previous_mass->position << std::endl; 
-            // std::clog << ith << " " << current_mass->position << std::endl; 
         }
 
 //        Comment-in this part when you implement the constructor
        for (auto &i : pinned_nodes) {
            masses[i]->pinned = true;
-        //    std::clog << i << std::endl;
        }
     }
 
     void Rope::simulateEuler(float delta_t, Vector2D gravity)
     {
-        int cnt;
-        cnt = 0;
         for (auto &s : springs)
         {
-            cnt += 1;
             // TODO (Part 2): Use Hooke's law to calculate the force on a node
             auto vec_12 = s->m2->position - s->m1->position;
             auto vec_12_norm = vec_12.norm();
@@ -64,10 +56,8 @@ namespace CGL {
             s->m1->forces += f;
             s->m2->forces += -f;
         }
-        cnt = 0;
         for (auto &m : masses)
         {
-            cnt += 1;
             if (!m->pinned)
             {
                 // TODO (Part 2): Add the force due to gravity, then compute the new velocity and position
@@ -87,11 +77,8 @@ namespace CGL {
     // added by user to compare semi implicit euler w.r.t. explicit euler
     void Rope::simulateSemiImplicitEuler(float delta_t, Vector2D gravity)
     {
-        int cnt;
-        cnt = 0;
         for (auto &s : springs)
         {
-            cnt += 1;
             // TODO (Part 2): Use Hooke's law to calculate the force on a node
             auto vec_12 = s->m2->position - s->m1->position;
             auto vec_12_norm = vec_12.norm();
@@ -99,10 +86,8 @@ namespace CGL {
             s->m1->forces += f;
             s->m2->forces += -f;
         }
-        cnt = 0;
         for (auto &m : masses)
         {
-            cnt += 1;
             if (!m->pinned)
             {
                 // TODO (Part 2): Add the force due to gravity, then compute the new velocity and position
