@@ -23,9 +23,12 @@ void Application::init() {
 
   glColor3f(1.0, 1.0, 1.0);
   // Create two ropes 
-  ropeEuler = new Rope(Vector2D(0, 200), Vector2D(-400, 200), 3, config.mass,
+  int num_nodes = 32; // it was 3 by default
+  ropeEuler = new Rope(Vector2D(0, 200), Vector2D(-400, 200), num_nodes, config.mass,
                        config.ks, {0});
-  ropeVerlet = new Rope(Vector2D(0, 200), Vector2D(-400, 200), 3, config.mass,
+  ropeSemiImplicitEuler = new Rope(Vector2D(0, 200), Vector2D(-400, 200), num_nodes, config.mass,
+                                   config.ks, {0});
+  ropeVerlet = new Rope(Vector2D(0, 200), Vector2D(-400, 200), num_nodes, config.mass,
                         config.ks, {0});
 }
 
@@ -33,18 +36,22 @@ void Application::render() {
   //Simulation loops
   for (int i = 0; i < config.steps_per_frame; i++) {
     ropeEuler->simulateEuler(1 / config.steps_per_frame, config.gravity);
+    ropeSemiImplicitEuler->simulateSemiImplicitEuler(1 / config.steps_per_frame, config.gravity);
     ropeVerlet->simulateVerlet(1 / config.steps_per_frame, config.gravity);
   }
   // Rendering ropes
   Rope *rope;
 
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 3; i++) {
     if (i == 0) {
       glColor3f(0.0, 0.0, 1.0);
       rope = ropeEuler;
-    } else {
+    } else if (i==1) {
       glColor3f(0.0, 1.0, 0.0);
       rope = ropeVerlet;
+    } else {
+      glColor3f(1.0, 0.0, 0.0);
+      rope = ropeSemiImplicitEuler;
     }
 
     glBegin(GL_POINTS);
