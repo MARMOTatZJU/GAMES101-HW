@@ -6,10 +6,11 @@ Legenda:
 
 Completed tasks:
 
-- Explicit Euler simulation (blue)
-  - diverge after several minutes
-- Semi Implicit Euler simulation (red)
-  - do not diverge, but will not stop trembling
+- euler method (images/euler_comparison.jpg)
+  - Explicit Euler simulation (blue)
+    - diverge after several minutes
+  - Semi Implicit Euler simulation (red)
+    - do not diverge, but will not stop trembling
 - 
 
 
