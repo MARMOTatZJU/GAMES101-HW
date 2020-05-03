@@ -1,6 +1,6 @@
 mkdir -p ./build
 pushd ./build
-cmake ..
+cmake -DCMAKE_BUILD_TYPE=RELEASE ..
 make
 echo "***************************************************************************************"
 ./RayTracing

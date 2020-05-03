@@ -32,8 +32,8 @@ inline float get_random_float()
 {
     // USER_NOTE: thread_local is extremely critical for performance
     //   10x speed up under 8 cores settings
-    thread_local std::random_device dev;
-    thread_local std::mt19937 rng(dev());
+    static thread_local std::random_device dev;
+    static thread_local std::mt19937 rng(dev());
     std::uniform_real_distribution<float> dist(0.f, 1.f); // distribution in range [1, 6]
 
     return dist(rng);
