@@ -43,3 +43,6 @@ build
 */.DS_Store
 MACOSX/
 */MACOSX/
+
+# Linux
+*.swp

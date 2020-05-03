@@ -230,9 +230,9 @@ void Renderer::Render(const Scene& scene)
             // Also, don't forget to multiply both of them with the variable *scale*, and
             // x (horizontal) variable with the *imageAspectRatio*            
             x = (float) i / scene.width - 0.5; 
-            x = x * scale * imageAspectRatio;
+            x = 2 * x * scale * imageAspectRatio;
             y = (float) (scene.height-1 - j) / scene.height - 0.5;
-            y = y * scale;
+            y = 2 * y * scale;
             
             Vector3f dir = Vector3f(x, y, -1); // Don't forget to normalize this direction!
             dir = normalize(dir);  // normalization
