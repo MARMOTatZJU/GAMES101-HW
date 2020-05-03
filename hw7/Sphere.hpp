@@ -58,7 +58,7 @@ public:
         if (t0 < 0) t0 = t1;
         if (t0 < 0) return result;
 
-        if (t0 > 1e-2)  // !!!important to avoid self-intersection (c.f. pbrt)
+        if (t0 > 1e-1)  // !!!important to avoid self-intersection (c.f. pbrt)
         {
             result.happened=true;
             result.coords = Vector3f(ray.origin + ray.direction * t0);

@@ -25,9 +25,13 @@ int main(int argc, char** argv)
     Material* light = new Material(DIFFUSE, (8.0f * Vector3f(0.747f+0.058f, 0.747f+0.258f, 0.747f) + 15.6f * Vector3f(0.740f+0.287f,0.740f+0.160f,0.740f) + 18.4f *Vector3f(0.737f+0.642f,0.737f+0.159f,0.737f)));
     light->Kd = Vector3f(0.65f);
     Material* microfacet = new Material(MICROFACET, Vector3f(0.0f));
-    microfacet->Ks = Vector3f(0.6f);
+    microfacet->Ks = Vector3f(0.4f);
+    // microfacet->Kd = Vector3f(0.1f);    
+    microfacet->Kd = Vector3f(0.2f, 0.2f, 0.05f);
     Material* microfacet_2 = new Material(MICROFACET_2, Vector3f(0.0f));
-    microfacet_2->Ks = Vector3f(0.6f);
+    microfacet_2->Ks = Vector3f(0.4f);
+    // microfacet_2->Kd = Vector3f(0.1f);
+    microfacet_2->Kd = Vector3f(0.05f, 0.05f, 0.2f);
 
     MeshTriangle floor("../models/cornellbox/floor.obj", white);
     MeshTriangle shortbox("../models/cornellbox/shortbox.obj", white);

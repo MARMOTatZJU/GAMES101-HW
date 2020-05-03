@@ -85,6 +85,9 @@ private:
         B = crossProduct(C, N);
         return a.x * B + a.y * C + a.z * N;
     }
+    inline float eval_diffuse(
+        const Vector3f &wi, const Vector3f &wo, const Vector3f &N
+    );
 
     inline float eval_microfacet(
         const Vector3f &wi, const Vector3f &wo, const Vector3f &N,
@@ -170,23 +173,39 @@ Vector3f Material::eval(const Vector3f &wi, const Vector3f &wo, const Vector3f &
         case DIFFUSE:
         {
             // calculate the contribution of diffuse   model
-            float cosalpha = dotProduct(N, wo);
-            if (cosalpha > 0.0f) {
-                Vector3f diffuse = Kd / M_PI;
-                return diffuse;
-            }
-            else
-                return Vector3f(0.0f);
+            // float cosalpha = dotProduct(N, wo);
+            // if (cosalpha > 0.0f) {
+            //     Vector3f diffuse = Kd / M_PI;
+            //     return diffuse;
+            // }
+            // else
+            //     return Vector3f(0.0f);
+            return Kd*eval_diffuse(wi, wo, N);
             break;
         }
         case MICROFACET:  // added by user for Microfacet model
         {
-            return Ks*eval_microfacet(wi, wo, N, 1.2, 0.2);
+            return Ks*eval_microfacet(wi, wo, N, 1.2, 0.2) + Kd*eval_diffuse(wi, wo, N);
+            break;
         }
         case MICROFACET_2:  // added by user for Microfacet model
         {
-            return Ks*eval_microfacet(wi, wo, N, 1.5, 0.2);
+            return Ks*eval_microfacet(wi, wo, N, 1.2, 0.6) + Kd*eval_diffuse(wi, wo, N);
+            break;
         }
+    }
+}
+
+float Material::eval_diffuse(
+    const Vector3f &wi, const Vector3f &wo, const Vector3f &N
+){
+    float cosalpha = dotProduct(N, wo);
+    if (cosalpha > 0.0f) {
+        return 1.0f / M_PI;
+    }
+    else
+    {
+        return 0.0f;
     }
 }
 
