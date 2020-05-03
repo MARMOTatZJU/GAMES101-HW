@@ -181,11 +181,11 @@ Vector3f Material::eval(const Vector3f &wi, const Vector3f &wo, const Vector3f &
         }
         case MICROFACET:  // added by user for Microfacet model
         {
-            return Ks*eval_microfacet(wi, wo, N, 1.5, 0.4);
+            return Ks*eval_microfacet(wi, wo, N, 1.2, 0.2);
         }
         case MICROFACET_2:  // added by user for Microfacet model
         {
-            return Ks*eval_microfacet(wi, wo, N, 1.5, 2.0);
+            return Ks*eval_microfacet(wi, wo, N, 1.5, 0.2);
         }
     }
 }

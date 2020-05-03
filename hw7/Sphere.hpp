@@ -57,13 +57,16 @@ public:
         if (!solveQuadratic(a, b, c, t0, t1)) return result;
         if (t0 < 0) t0 = t1;
         if (t0 < 0) return result;
-        result.happened=true;
 
-        result.coords = Vector3f(ray.origin + ray.direction * t0);
-        result.normal = normalize(Vector3f(result.coords - center));
-        result.m = this->m;
-        result.obj = this;
-        result.distance = t0;
+        if (t0 > 1e-2)  // !!!important to avoid self-intersection (c.f. pbrt)
+        {
+            result.happened=true;
+            result.coords = Vector3f(ray.origin + ray.direction * t0);
+            result.normal = normalize(Vector3f(result.coords - center));
+            result.m = this->m;
+            result.obj = this;
+            result.distance = t0;
+        }
         return result;
 
     }
