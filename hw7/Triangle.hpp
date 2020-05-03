@@ -55,7 +55,7 @@ public:
         e1 = v1 - v0;
         e2 = v2 - v0;
         normal = normalize(crossProduct(e1, e2));
-        area = crossProduct(e1, e2).norm();
+        area = crossProduct(e1, e2).norm() / 2;
     }
 
     bool intersect(const Ray& ray) override;
