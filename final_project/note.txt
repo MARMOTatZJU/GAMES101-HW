@@ -1,0 +1,50 @@
+Dependencies
+======
+ubuntu
+===
+$ sudo apt-get install build-essential python-dev python-numpy \
+    python-mako cython python-pytest mayavi2 python-qt4 python-virtualenv
+
+pip
+===
+pip3 install pytools pytest numpy-stl traits traitsui
+
+
+arrs = np.load('...npz')
+>>> arrs['particles'][()]['fluid']['arrays'].keys()
+dict_keys(['x', 'y', 'z', 'u', 'v', 'w', 'rho', 'm', 'h', 'pid', 'gid', 'tag', 'p'])
+
+>>> arrs['particles'][()]['fluid'].keys()
+dict_keys(['properties', 'constants', 'output_property_arrays', 'arrays'])
+
+
+>>> for k, v in arrs['particles'][()]['fluid']['arrays'].items():
+...   print(k, v.shape)
+... 
+x (4489,)
+y (4489,)
+z (4489,)
+u (4489,)
+v (4489,)
+w (4489,)
+rho (4489,)
+m (4489,)
+h (4489,)
+pid (4489,)
+gid (4489,)
+tag (4489,)
+p (4489,)
+
+
+
+        >>> solver = Solver(dim=2, integrator=integrator, kernel=kernel,
+        ...                 n_damp=50, tf=1.0, dt=1e-3, adaptive_timestep=True,
+        ...                 pfreq=100, cfl=0.5, output_at_times=[1e-1, 1.0])
+
+
+pfreq = 100 by default
+thus 10hz simulation
+
+
+
+
