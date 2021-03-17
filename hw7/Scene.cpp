@@ -125,7 +125,7 @@ Vector3f Scene::castRay(const Ray &ray, int depth) const
             Vector3f wi = m->sample(wo, N);  // sample a direction for indierect illumination
             Vector3f indir_shade_color = castRay(Ray(p, wi), depth);  // cast ray recursively
             L_indir = indir_shade_color * m->eval(wi, wo, N) 
-                      * dotProduct(wi, N) / m->pdf(wi, wo, N) / RussianRoulette;
+                      * dotProduct(wi, N) / m->pdf(wi, wo, N);  // remove an extra division by RussionRoulette according to https://github.com/MARMOTatZJU/GAMES101-HW/issues/2
         }
         L_indir = L_indir * 1.0/RussianRoulette;
 
