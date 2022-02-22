@@ -269,7 +269,7 @@ Eigen::Vector3f displacement_fragment_shader(const fragment_shader_payload& payl
     // w: width of texture
     float dU = kh * kn * ( payload.texture->getColor(u+1.0f/w, v).norm() - payload.texture->getColor(u, v).norm() );
     // h: height of texture
-    float dV = kh * kn * ( payload.texture->getColor(u+1, v+1.0f/h).norm() - payload.texture->getColor(u, v).norm() );
+    float dV = kh * kn * ( payload.texture->getColor(u, v+1.0f/h).norm() - payload.texture->getColor(u, v).norm() );
     Eigen::Vector3f ln = {-dU, -dV, 1.0f};
     // displacement
     point += kn * n * payload.texture->getColor(u, v).norm();
@@ -364,7 +364,7 @@ Eigen::Vector3f bump_fragment_shader(const fragment_shader_payload& payload)
     // w: width of texture
     float dU = kh * kn * ( payload.texture->getColor(u+1.0f/w, v).norm() - payload.texture->getColor(u, v).norm() );
     // h: height of texture
-    float dV = kh * kn * ( payload.texture->getColor(u+1, v+1.0f/h).norm() - payload.texture->getColor(u, v).norm() );
+    float dV = kh * kn * ( payload.texture->getColor(u, v+1.0f/h).norm() - payload.texture->getColor(u, v).norm() );
     Eigen::Vector3f ln = {-dU, -dV, 1.0f};
     // pertubated norm vector
     normal = (TBN * ln).normalized();
